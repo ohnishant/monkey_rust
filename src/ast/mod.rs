@@ -1,8 +1,9 @@
 use crate::token::Token;
 
 pub trait Node {
-    fn token_literal(&self) -> &String {
-        todo!()
+    fn token_literal(&self) -> String {
+        // TODO: check book for what actually needs to be implemented
+        return String::from("");
     }
     fn to_string(&self) -> &String;
 }
@@ -26,14 +27,13 @@ pub struct Program {
 }
 
 impl Node for Program {
-    // TODO: Implement this. deal with the string lifetimes lol
-    fn token_literal(&self) -> &String {
+    fn token_literal(&self) -> String {
         if self.statements.len() > 0 {
             let statement = &self.statements[0];
             match statement {
-                Statement::Let(_) => todo!(),
-                Statement::Return(_) => todo!(),
-                Statement::Expression(_) => todo!(),
+                Statement::Let(ls) => ls.token_literal().clone(),
+                Statement::Return(rs) => rs.token_literal().clone(),
+                Statement::Expression(exp) => exp.token_literal().clone(),
                 _ => unimplemented!("[ERROR]: Unimplemented statement type"),
             }
         } else {
@@ -54,12 +54,11 @@ pub struct LetStatement {
 }
 
 impl Node for LetStatement {
-    fn token_literal(&self) -> &String {
-        return &self.token.literal;
+    fn token_literal(&self) -> String {
+        return self.token.literal.clone();
     }
 
     fn to_string(&self) -> &String {
-        // FIXME: Implement this
         match &self.value {
             Expression::Identifier(ident) => return &ident.name,
             Expression::Literal(lit) => return &lit.value,
@@ -74,8 +73,8 @@ pub struct ReturnStatement {
 }
 
 impl Node for ReturnStatement {
-    fn token_literal(&self) -> &String {
-        return &self.token.literal;
+    fn token_literal(&self) -> String {
+        return self.token.literal.clone();
     }
 
     fn to_string(&self) -> &String {
@@ -93,8 +92,8 @@ pub struct ExpressionStatement {
 }
 
 impl Node for ExpressionStatement {
-    fn token_literal(&self) -> &String {
-        return &self.token.literal;
+    fn token_literal(&self) -> String {
+        return self.token.literal.clone();
     }
 
     fn to_string(&self) -> &String {
